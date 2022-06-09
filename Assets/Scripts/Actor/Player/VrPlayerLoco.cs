@@ -15,7 +15,7 @@ public class VrPlayerLoco : MonoBehaviour
     public float flySpeed;
     public float swimSpeed;
 
-    Rigidbody _rigid;
+    Rigidbody rigid;
     GameObject cameraRig;
 
     bool canSnapRotate = false;
@@ -23,7 +23,7 @@ public class VrPlayerLoco : MonoBehaviour
     private void Start()
     {
         player = ContentsManager.Instance.vrPlayer;
-        _rigid = player.rigid;
+        rigid = player.rigid;
         cameraRig = ContentsManager.Instance.vrCamera.gameObject;
 
         // -------- UpdateAsObservable -------
@@ -46,8 +46,8 @@ public class VrPlayerLoco : MonoBehaviour
             .Skip(TimeSpan.FromSeconds(1))
             .Subscribe(dir =>
             {
-                if (!_rigid.useGravity)
-                    _rigid.useGravity = true;
+                if (!rigid.useGravity)
+                    rigid.useGravity = true;
 
                 dir = (dir.magnitude >= 1) ? dir.normalized : dir;
 
@@ -79,8 +79,8 @@ public class VrPlayerLoco : MonoBehaviour
             .Where(_ => Physics.Raycast(transform.position + (Vector3.down * 0.5f), Vector3.down, 1f, 1 << LayerMask.NameToLayer("Ground")))
             .Subscribe(_ =>
             {
-                _rigid.velocity = Vector3.zero;
-                _rigid.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+                rigid.velocity = Vector3.zero;
+                rigid.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             });
     }
 
@@ -115,8 +115,8 @@ public class VrPlayerLoco : MonoBehaviour
             .Where(dir => dir.magnitude > 0.1f)
             .Subscribe(dir =>
             {
-                _rigid.useGravity = false;
-                _rigid.velocity = Vector3.zero;
+                rigid.useGravity = false;
+                rigid.velocity = Vector3.zero;
 
                 Quaternion q = Quaternion.LookRotation(centerCamera.transform.forward);
                 q.z = 0;
@@ -129,9 +129,16 @@ public class VrPlayerLoco : MonoBehaviour
 
     private void Movement(Vector2 dir, float speed)
     {
-        var hor = dir.x * speed * Time.deltaTime;
-        var ver = dir.y * speed * Time.deltaTime;
+        var hor = dir.x;
+        var ver = dir.y;
 
-        transform.Translate(new Vector3(hor, 0, ver), Space.Self);
+        // transform.Translate(new Vector3(hor, 0, ver), Space.Self);
+
+        var rigidDir = transform.TransformDirection(new Vector3(hor, 0, ver));
+        rigidDir.Normalize();
+
+        var moveOffset = rigidDir * speed * Time.fixedDeltaTime;
+        rigid.MovePosition(rigid.position + moveOffset);
+
     }
 }
