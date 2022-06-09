@@ -1,0 +1,163 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a122cf1f70edf114e8647559fb61d206
+  m_SerializeEntries:
+  - m_GUID: 7d28f3a2019d10a4997e1c868b014e88
+    m_Address: Art/UI/Inventory/Pistol
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InventoryIcon
+  - m_GUID: 3b4774abb2ba7004d9a38fdf063b00c3
+    m_Address: Art/UI/Inventory/SkateBoard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Inventory
+    - InventoryIcon
+  - m_GUID: 32b7bf53a59002949a818de524f28747
+    m_Address: Prefabs/Grab/Pistol
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Item
+  - m_GUID: 3d88d9bfa75e72c4a80a67fac3b8ea2c
+    m_Address: Prefabs/Bullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Item
+  - m_GUID: 11905513070e2f34e8cd7350fb0d8ce7
+    m_Address: Assets/Prefabs/Interactable/SkateBoard.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Item
+  - m_GUID: cc5d6e36fc6a6c448a7c38ea193045d7
+    m_Address: Assets/Prefabs/UI/Slot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b01f2036fba451942ac3c5eab48b64f7
+    m_Address: Assets/Prefabs/Line.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ec3f674830402cc45bce805cf6493db7
+    m_Address: Assets/Prefabs/Effect/EatingEffect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 76518a5f2e6469646a3d10482a9474fe
+    m_Address: Assets/Prefabs/Effect/FishShadow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 05602bdda46a8024da1afa8c891e4881
+    m_Address: Assets/Prefabs/Fishing/Fish/FlatFish.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6a1d5ae8c36ac62488905b8225eec096
+    m_Address: Assets/Prefabs/Fishing/Fish/Salmon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 22fa17fb4fb05ea4f99568623fbb93b8
+    m_Address: Assets/Prefabs/Fishing/Fish/SteamedSeaBream.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 37499e6115e9d794380a6cb525cdd25c
+    m_Address: Assets/Prefabs/Effect/Altitude.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0a1f54818877d1945a61076079b8d493
+    m_Address: Assets/Art/UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f9cad9319b8c1d242a524e43011e0bfe
+    m_Address: Assets/Art/Materials
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: db2d5d9638156ef4aa4b30807f84e48a
+    m_Address: Assets/Art/BeautifulSky
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3ce733e617b0d2344ac3789c1679d5b0
+    m_Address: Assets/Art/Cars
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5f164951fc0e3dd468ff9c293a0c1393
+    m_Address: Assets/Art/Cartoon_Weapon_Pack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a4393c4180da041438fbbbfdb880b437
+    m_Address: Assets/Art/Character
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2f23cc8542c660945afe7aea0240657b
+    m_Address: Assets/Art/FBX
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2ceb0c74f4131f743adba849bd3d13e5
+    m_Address: Assets/Art/Fish
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 65cdb1ba461acb247b6ee54e6fbb060b
+    m_Address: Assets/Art/FishingRod
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ec8fc4714162d5d42b6c6e769b3f09e7
+    m_Address: Assets/Art/Gun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2caddb7243f0a9b41ab76b287d84c568
+    m_Address: Assets/Art/Handpainted_Grass_and_Ground_Textures
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8a601c55fdcb031419a56c1095eb217c
+    m_Address: Assets/Art/Maps
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2c5598d46dafe104a9f7387e372812aa
+    m_Address: Assets/Art/Scateboard
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e4c4663ef6791154995566e1b8662d74
+    m_Address: Assets/Art/Shuriken
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 474312cfca9e9d54c984f9f530f227f1
+    m_Address: Assets/Art/Simple Foods
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 08dd7ec5a89a55e46853cd005a36213c
+    m_Address: Assets/Art/Sprite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a4fe9406644786648a25cc64a7980f0e
+    m_Address: Assets/Art/Textures
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 94703525252348b4ba1e7da3a4b0032a
+    m_Address: Assets/Art/Travis Game Assets
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 826ccff5888f589438837d5dcf0d6e5d
+    m_Address: Assets/Art/Water
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a66a52aaa86815c4f8d5eea4de4ed372
+    m_Address: Assets/Art/Wood
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 9105b6327d6631c48a85fcbf97842424, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b2fe7a1a59ac5b64d8f93a62663fb4aa, type: 2}
+    - {fileID: 11400000, guid: d55014a6be94e554ba653c50262b69fe, type: 2}

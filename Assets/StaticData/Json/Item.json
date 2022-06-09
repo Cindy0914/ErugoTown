@@ -1,0 +1,18 @@
+﻿[
+  {
+    "index": 1000,
+    "name": "SkateBoard",
+    "itemType": "Define.ItemType.Object",
+    "amount": 1,
+    "spritePath": "Art/Inventory/SkateBoard",
+    "prefabPath": "Prefabs/Interactable/SkateBoard"
+  },
+  {
+    "index": 1001,
+    "name": "Pistol",
+    "itemType": "Define.ItemType.Object",
+    "amount": 1,
+    "spritePath": "Art/Inventory/Pistol",
+    "prefabPath": "Prefabs/Grab/Pistol"
+  }
+]

@@ -1,0 +1,16 @@
+{
+    "name": "BzKovSoft.CharacterSlicer",
+    "rootNamespace": "",
+    "references": [
+        "GUID:85831811c64ac264091d54d5d95b1931"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,17 @@
+{
+    "name": "BzKovSoft.CharacterSlicer.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:85831811c64ac264091d54d5d95b1931",
+        "GUID:4680087b06056cc4ba7784bc5004ed8a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

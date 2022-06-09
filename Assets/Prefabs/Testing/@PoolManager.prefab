@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &990092043207699235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990092043207699233}
+  - component: {fileID: 990092043207699232}
+  m_Layer: 0
+  m_Name: '@PoolManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990092043207699233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990092043207699235}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 334.82324, y: 130.13159, z: -274.05453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990092043207699232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990092043207699235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54edca0234eeae34ba8ed595f0c3c7aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _poolObjectDataList:
+  - key: Bullet
+    prefab: {fileID: 5037209821727583163, guid: 3d88d9bfa75e72c4a80a67fac3b8ea2c, type: 3}
+    initialObjectCount: 30
+    maxObjectCount: 50
+  - key: Line
+    prefab: {fileID: 8592012907398740341, guid: b01f2036fba451942ac3c5eab48b64f7, type: 3}
+    initialObjectCount: 20
+    maxObjectCount: 120
+  - key: EatingEffect
+    prefab: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
+    initialObjectCount: 2
+    maxObjectCount: 3
+  - key: FishShadow
+    prefab: {fileID: 3262686086206395113, guid: 76518a5f2e6469646a3d10482a9474fe, type: 3}
+    initialObjectCount: 2
+    maxObjectCount: 3
+  - key: FlatFish
+    prefab: {fileID: 3791585632419589734, guid: 05602bdda46a8024da1afa8c891e4881, type: 3}
+    initialObjectCount: 2
+    maxObjectCount: 3
+  - key: Salmon
+    prefab: {fileID: 2901477843878277493, guid: 6a1d5ae8c36ac62488905b8225eec096, type: 3}
+    initialObjectCount: 2
+    maxObjectCount: 3
+  - key: SteamedSeaBream
+    prefab: {fileID: 7105361459836900362, guid: 22fa17fb4fb05ea4f99568623fbb93b8, type: 3}
+    initialObjectCount: 2
+    maxObjectCount: 3
