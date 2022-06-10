@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.rito.custom-transform-editor": {
+      "version": "https://github.com/rito15/Unity-Custom-Transform-Editor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "dd0d16aa213c0559ff838e717c6ec1b653953014"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
