@@ -6,8 +6,4 @@ public class VrPlayerEating : MonoBehaviour
 {
     public float eatingSpeed;
 
-    private void Start()
-    {
-        
-    }
 }

@@ -20,111 +20,106 @@ public class VrPlayerLoco : MonoBehaviour
 
     bool canSnapRotate = false;
 
+    bool groundCheck = false;
+
+    // 입력상태
+    bool isMove = false;
+    bool isJump = false;
+    bool isRotate = false;
+    bool isSwim = false;
+
+    // 키값
+    Vector2 input;
+    Quaternion cameraRot;
+    Quaternion swimCameraRot;
+
+
     private void Start()
     {
         player = ContentsManager.Instance.vrPlayer;
         rigid = player.rigid;
         cameraRig = ContentsManager.Instance.vrCamera.gameObject;
-
-        // -------- UpdateAsObservable -------
-        UpdateObservable_Jump();
-        UpdateObservable_VrRotation();
-
-        // -------- FixedUpdateAsObservable --------
-        FixedUpdateObserve_VrMovement();
-        // FixedUpdateObserve_FlyAxis();
-        // FixedUpdateObserve_FlyAction();
-        FixedUpdateObserve_Swimming();
     }
 
-    private void FixedUpdateObserve_VrMovement()
+    private void Update()
     {
-        this.FixedUpdateAsObservable() // VR 이동 키 입력
-            .Where(_ => player.canMove)
-            .Select(_ => OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick))
-            .Where(dir => dir.magnitude > 0.1f)
-            .Skip(TimeSpan.FromSeconds(1))
-            .Subscribe(dir =>
+        input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        input = (input.magnitude >= 1) ? input.normalized : input;
+
+        if (player.canMove)
+        {
+            if (isSwim)
+                isSwim = false;
+
+            // 이동
             {
-                if (!rigid.useGravity)
-                    rigid.useGravity = true;
+                isMove = (input.magnitude > 0.1f);
 
-                dir = (dir.magnitude >= 1) ? dir.normalized : dir;
+                if (isMove)
+                {
+                    if (!rigid.useGravity)
+                        rigid.useGravity = true;
+                }
+            }
 
-                Movement(dir, moveSpeed);
-            });
-    }
-
-    private void UpdateObservable_VrRotation()
-    {
-        this.FixedUpdateAsObservable()
-            .Where(_ => player.canMove)
-            .Where(_ => !player.state.Equals(VrPlayer.State.Swimming))
-            .Select(_ => Quaternion.LookRotation(centerCamera.transform.forward))
-            .Skip(TimeSpan.FromSeconds(1))
-            .Subscribe(cameraRot =>
+            // 카메라에 따른 회전
             {
+                cameraRot = Quaternion.LookRotation(centerCamera.transform.forward);
                 cameraRot.x = 0;
                 cameraRot.z = 0;
+                isRotate = true;
+            }
 
-                transform.rotation = cameraRot;
-            });
-    }
-
-    private void UpdateObservable_Jump()
-    {
-        this.UpdateAsObservable()
-            .Where(_ => player.canMove)
-            .Where(_ => OVRInput.GetDown(OVRInput.Button.Three))
-            .Where(_ => Physics.Raycast(transform.position + (Vector3.down * 0.5f), Vector3.down, 1f, 1 << LayerMask.NameToLayer("Ground")))
-            .Subscribe(_ =>
+            // 점프
             {
-                rigid.velocity = Vector3.zero;
-                rigid.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-            });
-    }
-
-    /*    private void FixedUpdateObserve_FlyAxis()
-        {
-            this.FixedUpdateAsObservable()
-                .Where(_ => player.canMove)
-                .Select(_ => OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick))
-                .Subscribe(axis =>
+                if (OVRInput.GetDown(OVRInput.Button.Three) && groundCheck)
                 {
-                    float yAxis = axis.y;
-                    _rigid.velocity = new Vector3(_rigid.velocity.x, yAxis * flySpeed, _rigid.velocity.z);
-                });
+                    isJump = true;
+                }
+            }
         }
-
-        private void FixedUpdateObserve_FlyAction()
+        else
         {
-            this.FixedUpdateAsObservable()
-                .Where(_ => player.canMove)
-                .Where(_ => OVRInput.Get(OVRInput.Button.Three))
-                .Subscribe(_ =>
-                {
-                    _rigid.velocity = new Vector3(_rigid.velocity.x, flySpeed, _rigid.velocity.z);
-                });
-        }*/
+            isMove = false;
+            isRotate = false;
+            isJump = false;
 
-    private void FixedUpdateObserve_Swimming()
-    {
-        this.FixedUpdateAsObservable()
-            .Where(_ => player.state.Equals(VrPlayer.State.Swimming))
-            .Select(axis => OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick))
-            .Where(dir => dir.magnitude > 0.1f)
-            .Subscribe(dir =>
+            // 수영
+            if (player.state.Equals(VrPlayer.State.Swimming))
             {
+                isSwim = true;
                 rigid.useGravity = false;
                 rigid.velocity = Vector3.zero;
 
-                Quaternion q = Quaternion.LookRotation(centerCamera.transform.forward);
-                q.z = 0;
-                transform.rotation = q;
+                swimCameraRot = Quaternion.LookRotation(centerCamera.transform.forward);
+                swimCameraRot.z = 0;
+            }
+        }
+    }
 
-                dir = (dir.magnitude >= 1) ? dir.normalized : dir;
-                Movement(dir, swimSpeed);
-            });
+    private void FixedUpdate()
+    {
+        if (isMove)
+            Movement(input, moveSpeed);
+
+        if (isRotate)
+            transform.rotation = cameraRot;
+
+
+        groundCheck =
+            Physics.Raycast(transform.position + (Vector3.down * 0.5f), Vector3.down, 1f, 1 << LayerMask.NameToLayer("Ground"));
+        if (isJump)
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+        }
+
+        if (isSwim)
+        {
+            transform.rotation = swimCameraRot;
+            Movement(input, swimSpeed);
+        }
+
     }
 
     private void Movement(Vector2 dir, float speed)

@@ -1,8 +1,3 @@
-using OculusSampleFramework;
-using System.Collections;
-using System.Collections.Generic;
-using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 
 public class VrPlayer : MonoBehaviour
@@ -11,10 +6,9 @@ public class VrPlayer : MonoBehaviour
     {
         Basic = 0,
         Shooting,
-        MachineGunShooting,
         Swimming,
         Eating,
-        Car,
+        Boarding,
         Fishing,
         Falling,
         Skateing,
@@ -63,3 +57,4 @@ public class VrPlayer : MonoBehaviour
         TryGetComponent(out inventory);
     }
 }
+

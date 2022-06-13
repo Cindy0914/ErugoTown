@@ -16,6 +16,7 @@ public class VrPlayerGrab : MonoBehaviour
     public float objectThrowSpeed;
 
     public GameObject gunInfoCanvas;
+    GameObject currentGrabObject;
 
     private void Start()
     {
@@ -24,57 +25,61 @@ public class VrPlayerGrab : MonoBehaviour
         r_grabber = player.r_grabber;
 
         originThrowSpeed = l_grabber.throwSpeed;
-        UpdateObserve_GrabbableInteraction();
-        UpdateObserve_CheckNullOfGrabbedObject();
+        CheckNullOfGrabbedObjectByValueChange();
     }
 
-    private void UpdateObserve_GrabbableInteraction()
+    private void Update()
     {
-        this.UpdateAsObservable()
-            .Where(_ => (GetCurrentGrabbedObject() != null))
-            .Select(grabbed => GetCurrentGrabbedObject())
-            .Subscribe(grabbed =>
-            {
-                l_grabber.throwSpeed = originThrowSpeed;
-                r_grabber.throwSpeed = originThrowSpeed;
-
-                player.l_laser.SetActive(false);
-                player.r_laser.SetActive(false);
-
-                switch (grabbed.gameObject.tag)
-                {
-                    case "Gun":
-                        if (player.playerShooting.muzzle == null)
-                        {
-                            player.playerShooting.muzzle = grabbed.gameObject.transform.Find("Muzzle");
-                            player.state = VrPlayer.State.Shooting;
-                            gunInfoCanvas.SetActive(true);
-                        }
-                        break;
-                    case "MachineGun":
-                        if (player.playerShooting.muzzle == null)
-                        {
-                            player.playerShooting.muzzle = grabbed.gameObject.transform.Find("Muzzle");
-                            player.state = VrPlayer.State.MachineGunShooting;
-                            gunInfoCanvas.SetActive(true);
-                        }
-                        break;
-                    case "Throw":
-                        // grabbed.grabbedRigidbody.isKinematic = false;
-                        l_grabber.throwSpeed = objectThrowSpeed;
-                        r_grabber.throwSpeed = objectThrowSpeed;
-                        break;
-                    case "Food":
-                        player.state = VrPlayer.State.Eating;
-                        break;
-                    case "FishingRod":
-                        player.state = VrPlayer.State.Fishing;
-                        break;
-                }
-            });
+        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger) || OVRInput.Get(OVRInput.Button.SecondaryHandTrigger))
+            GrabbableInteraction();
     }
 
-    private void UpdateObserve_CheckNullOfGrabbedObject()
+    private void GrabbableInteraction()
+    {
+        currentGrabObject = GetCurrentGrabbedObject();
+
+        if (currentGrabObject != null)
+        {
+            l_grabber.throwSpeed = originThrowSpeed;
+            r_grabber.throwSpeed = originThrowSpeed;
+
+            player.l_laser.SetActive(false);
+            player.r_laser.SetActive(false);
+
+            switch (currentGrabObject.gameObject.tag)
+            {
+                case "Gun":
+                    if (player.playerShooting.muzzle == null)
+                    {
+                        player.playerShooting.muzzle = currentGrabObject.gameObject.transform.Find("Muzzle");
+                        player.state = VrPlayer.State.Shooting;
+                        gunInfoCanvas.SetActive(true);
+                    }
+                    break;
+                case "MachineGun":
+                    if (player.playerShooting.muzzle == null)
+                    {
+                        player.playerShooting.muzzle = currentGrabObject.gameObject.transform.Find("Muzzle");
+                        player.state = VrPlayer.State.Shooting;
+                        gunInfoCanvas.SetActive(true);
+                    }
+                    break;
+                case "Throw":
+                    // grabbed.grabbedRigidbody.isKinematic = false;
+                    l_grabber.throwSpeed = objectThrowSpeed;
+                    r_grabber.throwSpeed = objectThrowSpeed;
+                    break;
+                case "Food":
+                    player.state = VrPlayer.State.Eating;
+                    break;
+                case "FishingRod":
+                    player.state = VrPlayer.State.Fishing;
+                    break;
+            }
+        }
+    }
+
+    private void CheckNullOfGrabbedObjectByValueChange()
     {
         r_grabber.ObserveEveryValueChanged(value => value.currentGrabbable)
             .Skip(System.TimeSpan.Zero)

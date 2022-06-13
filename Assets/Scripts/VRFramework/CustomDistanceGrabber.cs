@@ -7,6 +7,24 @@ using UnityEngine;
 
 public class CustomDistanceGrabber : MonoBehaviour
 {
+    // GrabObject마다 잡을수 있는 손이 정해져있음
+    // 따라서 오브젝트의 태그를 이용해 상호작용손을 나눠줬음
+    // 만약 양손 모두 잡을수있는 오브젝트라면 양쪽모두 멤버로 들고있어야함
+    public enum LeftInteractionObjectTag
+    {
+        Throw,
+        Food,
+
+    }
+
+    public enum RightInteractionObjectTag
+    {
+        Gun,
+        Throw,
+        Food,
+
+    }
+
     /// <summary>
     /// 오브젝트 인식 최대거리
     /// </summary>
@@ -39,51 +57,44 @@ public class CustomDistanceGrabber : MonoBehaviour
 
         laser.SetPosition(1, new Vector3(0, 0, maxGrabDistance));
         laser.transform.Find("Point").transform.localPosition = new Vector3(0, 0, maxGrabDistance);
+    }
 
+    private void Update()
+    {
         switch (controller)
         {
             case OVRInput.Controller.LTouch:
-                this.UpdateAsObservable()
-                    .Where(_ => OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger))
-                    .Subscribe(_ =>
-                    {
-                        FindGrabbableObject();
-                    });
-
-                this.UpdateAsObservable()
-                    .Where(_ => OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger))
-                    .Subscribe(_ =>
-                    {
-                        EndGrab();
-                    });
+                if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger))
+                    FindInteracteObject(typeof(LeftInteractionObjectTag));
+                if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger))
+                    EndGrab();
                 break;
-
             case OVRInput.Controller.RTouch:
-                this.UpdateAsObservable()
-                    .Where(_ => OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
-                    .Subscribe(_ =>
-                    {
-                        FindGrabbableObject();
-                    });
-
-                this.UpdateAsObservable()
-                    .Where(_ => OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger))
-                    .Subscribe(_ =>
-                    {
-                        EndGrab();
-                    });
+                if (OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
+                    FindInteracteObject(typeof(LeftInteractionObjectTag));
+                if (OVRInput.GetUp(OVRInput.Button.SecondaryHandTrigger))
+                    EndGrab();
                 break;
         }
     }
 
-    private void FindGrabbableObject()
+    private void FindInteracteObject(System.Type type)
     {
         RaycastHit hit;
         if (Physics.Raycast(laser.transform.position, laser.transform.forward, out hit, maxGrabDistance, 1 << (int)targetLayer))
         {
             currentGrabbable = hit.collider.gameObject;
-            grabbable = currentGrabbable.GetComponent<CustomGrabbable>();
-            BeginGrab();
+
+            var interacteObject = System.Enum.GetValues(type);
+            foreach (var obj in interacteObject)
+            {
+                if (obj.ToString().Equals(currentGrabbable.tag))
+                {
+                    grabbable = currentGrabbable.GetComponent<CustomGrabbable>();
+                    BeginGrab();
+                    break;
+                }
+            }
         }
     }
 
@@ -95,11 +106,6 @@ public class CustomDistanceGrabber : MonoBehaviour
         currentGrabbable.transform.SetParent(gripTrans);
         currentGrabbable.transform.DOLocalMove(Vector3.zero, pullDuration).SetEase(ease);
         currentGrabbable.transform.DOLocalRotate(Vector3.zero, pullDuration);
-    }
-
-    private void Grabbing()
-    {
-
     }
 
     private void EndGrab()

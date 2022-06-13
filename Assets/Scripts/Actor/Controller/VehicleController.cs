@@ -37,7 +37,7 @@ public class VehicleController : MonoBehaviour
         rigid.centerOfMass = new Vector3(0, -1, 0);
 
         this.FixedUpdateAsObservable()
-            .Where(_ => player.state.Equals(VrPlayer.State.Car))
+            .Where(_ => player.state.Equals(VrPlayer.State.Boarding))
             .Select(axis => OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick))
             .Subscribe(axis =>
             {
@@ -45,7 +45,7 @@ public class VehicleController : MonoBehaviour
             });
 
         this.UpdateAsObservable()
-            .Where(_ => player.state.Equals(VrPlayer.State.Car))
+            .Where(_ => player.state.Equals(VrPlayer.State.Boarding))
             .Subscribe(_ =>
             {
                 ContentsManager.Instance.vrCamera.gameObject.transform.rotation = car.inTrans.rotation;
@@ -53,7 +53,7 @@ public class VehicleController : MonoBehaviour
 
         // ÇÏÂ÷
         this.UpdateAsObservable()
-            .Where(_ => player.state.Equals(VrPlayer.State.Car))
+            .Where(_ => player.state.Equals(VrPlayer.State.Boarding))
             .Where(_ => OVRInput.GetDown(OVRInput.Button.One))
             .Subscribe(_ =>
             {
@@ -119,7 +119,7 @@ public class VehicleController : MonoBehaviour
                 player.transform.localRotation = Quaternion.identity;
 
                 player.canMove = false;
-                player.state = VrPlayer.State.Car;
+                player.state = VrPlayer.State.Boarding;
 
                 player.col.enabled = false;
                 player.rigid.useGravity = false;

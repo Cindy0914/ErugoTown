@@ -79,80 +79,81 @@ public class VrPlayerFishing : MonoBehaviour
             {
                 StartCoroutine(Util.Util.ViberateRepeat(5, 0.03f, 0.5f, 0.8f));
             });
-
-        // ³¬½Ã¿¡ ´ëÇÑ »óÅÂÁ¶Àý
-        UpdateObserve_FishingButtonDownUp();
     }
 
-    private void UpdateObserve_FishingButtonDownUp()
+    private void Update()
+    {
+        FishingByState();
+    }
+
+    private void FishingByState()
     {
         float fishingStartZPos = 0f;
         float fishingEndZPos = 0f;
 
-        this.UpdateAsObservable()
-           .Where(_ => player.state.Equals(VrPlayer.State.Fishing))
-           .Where(_ => OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
-           .Subscribe(_ =>
-           {
-               switch (state)
-               {
-                   // ³¬½Ã ½ÃÀÛ
-                   case FishingState.Start:
+        // ³¬½Ã¿¡ ´ëÇÑ »óÅÂÁ¶Àý
+        if (player.state.Equals(VrPlayer.State.Fishing))
+        {
+            if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            {
 
-                       player.canMove = false;
-                       IsFishing = true;
-                       canCatch = false;
+                switch (state)
+                {
+                    // ³¬½Ã ½ÃÀÛ
+                    case FishingState.Start:
 
-                       fishingStartZPos = r_Hand.transform.localPosition.z;
-                       successRandValue = UnityEngine.Random.Range(0f, 100f);
-                       break;
-               }
-           });
+                        player.canMove = false;
+                        IsFishing = true;
+                        canCatch = false;
 
-        this.UpdateAsObservable()
-           .Where(_ => player.state.Equals(VrPlayer.State.Fishing))
-           .Where(_ => OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
-           .Subscribe(_ =>
-           {
-               switch (state)
-               {
-                   case FishingState.Start:
-                       bobber.rigid.isKinematic = false;
-                       fishingEndZPos = r_Hand.transform.localPosition.z;
+                        fishingStartZPos = r_Hand.transform.localPosition.z;
+                        successRandValue = UnityEngine.Random.Range(0f, 100f);
+                        break;
+                }
+            }
+            if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                switch (state)
+                {
+                    case FishingState.Start:
+                        bobber.rigid.isKinematic = false;
+                        fishingEndZPos = r_Hand.transform.localPosition.z;
 
-                       // ³¬½Ë´ë ´øÁö±â
-                       bobber.rigid.AddForce((Camera.main.transform.forward + Vector3.up) * (10 + (Mathf.Abs(fishingEndZPos - fishingStartZPos) * 50)), ForceMode.Impulse);
-                       state = FishingState.End;
-                       break;
-                   case FishingState.End:
-                       bobber.rigid.isKinematic = true;
-                       fishingStartZPos = 0;
-                       fishingEndZPos = 0;
-                       EndFishing();
+                        // ³¬½Ë´ë ´øÁö±â
+                        bobber.rigid.AddForce((Camera.main.transform.forward + Vector3.up) * (10 + (Mathf.Abs(fishingEndZPos - fishingStartZPos) * 50)), ForceMode.Impulse);
+                        state = FishingState.End;
+                        break;
+                    case FishingState.End:
+                        bobber.rigid.isKinematic = true;
+                        fishingStartZPos = 0;
+                        fishingEndZPos = 0;
+                        EndFishing();
 
-                       if (canCatch)
-                       {
-                           // ³¬½Ã ¼º°ø
-                           var randNum = UnityEngine.Random.Range(0, fishs.Length);
-                           var fish = ObjectPoolManager.Instance.Spawn(fishs[randNum].name);
-                           var fishRigid = fish.GetComponent<Rigidbody>();
-                           fishRigid.isKinematic = true;
-                           fish.transform.position = bobber.transform.position;
-                           fish.transform.rotation = Quaternion.identity;
-                           fish.gameObject.transform.SetParent(bobber.gameObject.transform);
+                        if (canCatch)
+                        {
+                            // ³¬½Ã ¼º°ø
+                            var randNum = UnityEngine.Random.Range(0, fishs.Length);
+                            var fish = ObjectPoolManager.Instance.Spawn(fishs[randNum].name);
+                            var fishRigid = fish.GetComponent<Rigidbody>();
+                            fishRigid.isKinematic = true;
+                            fish.transform.position = bobber.transform.position;
+                            fish.transform.rotation = Quaternion.identity;
+                            fish.gameObject.transform.SetParent(bobber.gameObject.transform);
 
-                           Observable.Timer(System.TimeSpan.FromSeconds(0.5f))
-                           .Subscribe(_ =>
-                           {
-                               fish.gameObject.transform.SetParent(null);
-                               fishRigid.isKinematic = false;
-                           });
+                            Observable.Timer(System.TimeSpan.FromSeconds(0.5f))
+                            .Subscribe(_ =>
+                            {
+                                fish.gameObject.transform.SetParent(null);
+                                fishRigid.isKinematic = false;
+                            });
 
-                           player.mainText.SetText($"[{fish.name}]À»(¸¦) ³¬¾Ò½À´Ï´Ù!", Color.yellow);
-                       }
-                       break;
-               }
-           });
+                            player.mainText.SetText($"[{fish.name}]À»(¸¦) ³¬¾Ò½À´Ï´Ù!", Color.yellow);
+                        }
+                        break;
+                }
+            }
+        }
+
     }
 
     private void WhetherSuccess()

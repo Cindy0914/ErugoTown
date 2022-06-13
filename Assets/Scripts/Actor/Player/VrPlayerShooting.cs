@@ -11,57 +11,64 @@ public class VrPlayerShooting : MonoBehaviour
     [HideInInspector]
     public Transform muzzle;
 
-    [HideInInspector]
-    public int bulletCount = 0;
+    public int bulletCount { get; set; }
+
+    const int MAX_GUNBULLETCOUNT = 30;
+    const int MAX_MACHINEGUNBULLETCOUNT = 75;
 
     int thumpDownCount = 0;
     bool isThumpDown = false;
+    WaitForSeconds thumpDownDelay = new WaitForSeconds(0.3f);
+
+    GameObject currentGrabObject;
+    CustomDistanceGrabber r_grabber;
 
     private void Start()
     {
         player = ContentsManager.Instance.vrPlayer;
-        UpdateObserve_Shot();
-        UpdateObserve_MashineGunShot();
-        UpdateObserve_ReLoad();
+        r_grabber = player.r_grabber;
+        MashineGunShot();
     }
 
-    private void UpdateObserve_Shot()
+    private void Update()
     {
-        this.UpdateAsObservable()
-            .Where(_ => player.state.Equals(VrPlayer.State.Shooting))
-            .Where(_ => OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
-            .Where(_ => bulletCount < 30)
-            .Subscribe(_ =>
+        if(player.state.Equals(VrPlayer.State.Shooting))
+        {
+            var input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+
+            switch (r_grabber.currentGrabbable.tag)
             {
-                ShotBullet(0.5f, 0.5f, 0.5f);
-                bulletCount++;
-            });
+                case "Gun":
+                    if(bulletCount >= MAX_GUNBULLETCOUNT)
+                    {
+                        ReLoad(input);
+                        return;
+                    }
+                    if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+                    {
+                        ShotBullet(0.5f, 0.5f, 0.5f);
+                        bulletCount++;
+                    }
+                    break;
+                case "MachineGun":
+                    if (bulletCount >= MAX_MACHINEGUNBULLETCOUNT)
+                        ReLoad(input);
+                    break;
+            }
+        }
     }
-    private void UpdateObserve_MashineGunShot()
+
+    private void MashineGunShot()
     {
         Observable.Interval(TimeSpan.FromSeconds(0.05f))
-            .Where(_ => player.state.Equals(VrPlayer.State.MachineGunShooting))
+            .Where(_ => r_grabber.currentGrabbable.CompareTag("MachineGun"))
             .Where(_ => OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
-            .Where(_ => bulletCount < 75)
+            .Where(_ => bulletCount < MAX_MACHINEGUNBULLETCOUNT)
             .Subscribe(_ =>
             {
                 ShotBullet(0.03f, 0.5f, 0.5f);
                 bulletCount++;
             });
-    }
-    private void UpdateObserve_ReLoad()
-    { 
-        this.UpdateAsObservable()
-            .Where(_ =>
-            {
-                if (player.state.Equals(VrPlayer.State.Shooting))
-                    return (bulletCount >= 30);
-                else if (player.state.Equals(VrPlayer.State.MachineGunShooting))
-                    return (bulletCount >= 75);
-                return false;
-            })
-            .Select(axis => OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick))
-            .Subscribe(axis => ReLoad(axis));
     }
 
     private void ShotBullet(float waitTime, float frequency, float amplitude)
@@ -95,7 +102,7 @@ public class VrPlayerShooting : MonoBehaviour
 
     private IEnumerator ThumpDownDelayRefresh()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return thumpDownDelay;
         isThumpDown = false;
     }
 }

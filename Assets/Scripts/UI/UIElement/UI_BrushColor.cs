@@ -43,9 +43,27 @@ public class UI_BrushColor : MonoBehaviour
             .Subscribe(_ => selectColorImg.gameObject.SetActive(false));
     }
 
+    private void Update()
+    {
+        if(laserPointer.currentObject.Equals(this.gameObject))
+        {
+            if(OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                selectColorImg.gameObject.SetActive(true);
+                canSketch = true;
+            }
+            if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                GetColorFromWheel();
+                selectColorImg.color = savedColor;
+            }
+            if (OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+                selectColorImg.gameObject.SetActive(false);
+        }
+    }
+
     public void GetColorFromWheel()
     {
-        // convert cursor world position to UV
         var localPos = colorWheel.transform.InverseTransformPoint(laserPointer.hit.point);
         var toImg = new Vector2(localPos.x / colorWheel.sizeDelta.x + 0.5f, localPos.y / colorWheel.sizeDelta.y + 0.5f);
         Color sampledColor = Color.black;

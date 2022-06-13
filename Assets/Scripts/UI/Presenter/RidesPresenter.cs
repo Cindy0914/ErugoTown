@@ -46,11 +46,13 @@ public class RidesPresenter : MonoBehaviour
             pendulumBtn[i].button.onClick.AddListener(OnBtnClickedInPendulum);
             roundBtn[i].button.onClick.AddListener(OnBtnClickedInRound);
         }
+    }
 
-        this.UpdateAsObservable()
-            .Where(_ => isIn)
-            .Where(_ => OVRInput.GetDown(OVRInput.Button.Four))
-            .Subscribe(_ =>
+    private void Update()
+    {
+        if (isIn)
+        {
+            if (OVRInput.GetDown(OVRInput.Button.Four))
             {
                 Fade.Instance.FadeInOut(() =>
                 {
@@ -58,14 +60,14 @@ public class RidesPresenter : MonoBehaviour
                     player.transform.position = outVec;
                     player.transform.rotation = outRot;
                 });
-            });
+            }
+        }
+    }
 
-        this.UpdateAsObservable()
-            .Where(_ => isIn)
-            .Subscribe(_ =>
-            {
-                ContentsManager.Instance.vrCamera.gameObject.transform.rotation = Quaternion.identity;
-            });
+    private void FixedUpdate()
+    {
+        if (isIn)
+            ContentsManager.Instance.vrCamera.gameObject.transform.rotation = Quaternion.identity;
     }
 
     private void OnBtnClickedInRoller()
