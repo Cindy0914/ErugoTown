@@ -28,12 +28,12 @@ public class VrPlayerFalling : MonoBehaviour
         rigid = player.rigid;
         originDrag = rigid.drag;
 
+        CreateBoundary();
         ValueChangeByOpenAltitude();
     }
 
     private void Update()
     {
-        CreateBoundary();
 
         // 특정 고동에서 키를 입력받아 낙하산을 펼침
         if (canOpenAltitude && OVRInput.GetDown(OVRInput.Button.Three))
